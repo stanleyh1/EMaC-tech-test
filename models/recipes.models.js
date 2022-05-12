@@ -39,22 +39,3 @@ fs.promises.readFile(filePath, 'utf8').then((recipeString) => {
 })
 
 
-//   const newRecipe = req.body
-//   fs.appendFile(filePath, newRecipe, (err) => {
-//     if(err) {
-//       console.log(err)
-//     }
-//     else {
-//       console.log(newRecipe)
-//       fs.readFile(filePath, 'utf8', (err, recipeString) => {
-//         if (err) {
-//           console.log(err)
-//         }
-//         else {
-//           const parsedRecipes = JSON.parse(recipeString);
-//           callback(null, parsedRecipes)
-//         }
-//       })
-//     }
-//   })
-
