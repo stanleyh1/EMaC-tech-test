@@ -1,4 +1,4 @@
-const { fetchRecipes, selectRecipeById } = require('../models/recipes.models')
+const { fetchRecipes, selectRecipeById, postRecipe } = require('../models/recipes.models')
 
   exports.getAllRecipes = (req, res) => {
     fetchRecipes((err, recipes) => {
@@ -14,3 +14,10 @@ const { fetchRecipes, selectRecipeById } = require('../models/recipes.models')
     });
   };
 
+
+  exports.addRecipe = (req,res) => {
+    postRecipe((err, newRecipes) => {
+      
+      res.status(201).send(newRecipes)
+    });
+  };

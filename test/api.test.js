@@ -3,11 +3,11 @@ const server = require('../server');
 const request = supertest(server);
 
 
-
 test('/api', async () => {
   const { body } = await request.get('/api').expect(200);
   expect(body.message).toBe('ok');
 })
+
 
 describe("GET/api/recipes", () => {
   test("status: 200 returns an array of all recipes", () => {
@@ -48,3 +48,33 @@ describe("GET/api/recipes", () => {
             });
       });
 });
+describe("POST/api/recipes", () => {
+  test("status: 201 returns a newly created recipe", () => {
+    const recipe = {
+      id: "recipe-200",
+      imageUrl: "http://www.images.com/200",
+      instructions: "whizz in your blender for a healthy breakfast or snack",
+      ingredients: [
+        { name: "demerara sugar", "grams": 25 },
+        { name: "banana", "grams": 66 },
+        { name: "apple juice", "grams": 44 },
+        { name: "oat milk", "grams": 198 }
+      ]
+    }
+    return request
+      .post("/api/recipes")
+      .send(recipe)
+      .expect(201)
+      .then((res) => {
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body).toEqual(
+          expect.objectContaining({
+          id: expect.any(String),
+          imageUrl: expect.any(String),
+          instructions: expect.any(String),
+          ingredients: expect.any(Array)
+        })
+        )
+        });
+      });
+  });

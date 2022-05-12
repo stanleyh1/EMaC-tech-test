@@ -6,8 +6,8 @@ exports.fetchRecipes = (callback) => {
   fs.readFile(filePath, 'utf8', (err, recipeString) => {
     if (err) console.log(err);
     else {
-      const parsedRecipe = JSON.parse(recipeString);
-      callback(null, parsedRecipe);
+      const parsedRecipes = JSON.parse(recipeString);
+      callback(null, parsedRecipes);
     }
   });
 };
@@ -21,3 +21,24 @@ exports.selectRecipeById = (callback) => {
     }
   });
 };
+
+exports.postRecipe = (callback) => {
+  
+  fs.appendFile(filePath,'utf8', newRecipe, (err) => {
+    if(err) {
+      console.log(err)
+    }
+    else {
+      console.log(newRecipe)
+      fs.readFile(filePath, 'utf8', (err, recipeString) => {
+        if (err) {
+          console.log(err)
+        }
+        else {
+          const parsedRecipes = JSON.parse(recipeString);
+          callback(null, parsedRecipes)
+        }
+      })
+    }
+  })
+}
