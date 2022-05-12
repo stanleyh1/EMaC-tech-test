@@ -2,43 +2,59 @@ const fs = require("fs");
 
 const filePath = "data/data.json"
 
-exports.fetchRecipes = (callback) => {
-  fs.readFile(filePath, 'utf8', (err, recipeString) => {
-    if (err) console.log(err);
-    else {
+exports.fetchRecipes = () => 
+fs.promises.readFile(filePath, 'utf8')
+    .then((recipeString) => {
       const parsedRecipes = JSON.parse(recipeString);
-      callback(null, parsedRecipes);
-    }
-  });
-};
-
-exports.selectRecipeById = (callback) => {
-  fs.readFile(filePath, 'utf8', (err, recipeString) => {
-    if (err) console.log(err);
-    else {
-      const parsedRecipe = JSON.parse(recipeString);
-      callback(null, parsedRecipe);
-    }
-  });
-};
-
-exports.postRecipe = (callback) => {
-  
-  fs.appendFile(filePath,'utf8', newRecipe, (err) => {
-    if(err) {
+      return parsedRecipes
+    })
+    .catch((err) => {
       console.log(err)
-    }
-    else {
-      console.log(newRecipe)
-      fs.readFile(filePath, 'utf8', (err, recipeString) => {
-        if (err) {
-          console.log(err)
-        }
-        else {
-          const parsedRecipes = JSON.parse(recipeString);
-          callback(null, parsedRecipes)
-        }
-      })
-    }
+    })
+
+
+exports.selectRecipeById = () => 
+  fs.promises.readFile(filePath, 'utf8').then((recipeString) => {
+      const parsedRecipes = JSON.parse(recipeString);
+      return parsedRecipes
+    })
+  .catch((err) => {
+    console.log(err)
   })
-}
+
+
+exports.postRecipe = (newRecipe) => 
+fs.promises.readFile(filePath, 'utf8').then((recipeString) => {
+  const newId = 'recipe-200'
+  const parsedRecipes = JSON.parse(recipeString);
+  newRecipe.id = newId
+  parsedRecipes.push(newRecipe)
+  const newRecipesString = JSON.stringify(parsedRecipes)
+  fs.writeFileSync (filePath, newRecipesString)
+  console.log(newRecipe.id)
+  return newRecipe.id
+})
+.catch((err) => {
+  console.log(err)
+})
+
+
+//   const newRecipe = req.body
+//   fs.appendFile(filePath, newRecipe, (err) => {
+//     if(err) {
+//       console.log(err)
+//     }
+//     else {
+//       console.log(newRecipe)
+//       fs.readFile(filePath, 'utf8', (err, recipeString) => {
+//         if (err) {
+//           console.log(err)
+//         }
+//         else {
+//           const parsedRecipes = JSON.parse(recipeString);
+//           callback(null, parsedRecipes)
+//         }
+//       })
+//     }
+//   })
+

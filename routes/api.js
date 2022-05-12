@@ -6,7 +6,7 @@ apiRouter.get('/', (_, res) => {
 });
 
 apiRouter.get('/recipes', getAllRecipes)
-         .post('/recipes', addRecipe)
+apiRouter.post('/recipes', addRecipe)
 apiRouter.get('/recipes/:recipeId', getRecipeById)
 
 module.exports = apiRouter;

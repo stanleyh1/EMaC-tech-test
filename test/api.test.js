@@ -51,7 +51,6 @@ describe("GET/api/recipes", () => {
 describe("POST/api/recipes", () => {
   test("status: 201 returns a newly created recipe", () => {
     const recipe = {
-      id: "recipe-200",
       imageUrl: "http://www.images.com/200",
       instructions: "whizz in your blender for a healthy breakfast or snack",
       ingredients: [
@@ -66,15 +65,45 @@ describe("POST/api/recipes", () => {
       .send(recipe)
       .expect(201)
       .then((res) => {
-        expect(res.body).toBeInstanceOf(Object);
-        expect(res.body).toEqual(
-          expect.objectContaining({
-          id: expect.any(String),
-          imageUrl: expect.any(String),
-          instructions: expect.any(String),
-          ingredients: expect.any(Array)
-        })
-        )
+        expect(typeof res.body.recipeId).toBe("string");
         });
       });
-  });
+  test("status 200 returns a newly posted recipe", () => {
+    const recipe = {
+      imageUrl: "http://www.images.com/200",
+      instructions: "whizz in your blender for a healthy breakfast or snack",
+      ingredients: [
+        { name: "demerara sugar", "grams": 25 },
+        { name: "banana", "grams": 66 },
+        { name: "apple juice", "grams": 44 },
+        { name: "oat milk", "grams": 198 }
+      ]
+    }
+    return request
+    .post("/api/recipes")
+    .send(recipe)
+    .then((res) => {
+      const { recipeId } = res.body
+      return request
+      .get(`/api/recipes/${recipeId}`)
+    })
+    .then((res) => {
+      expect(typeof res.body).toBe("object");
+      expect(res.body).toEqual(
+        expect.objectContaining(
+          { 
+            id: "recipe-200",
+            imageUrl: "http://www.images.com/200",
+            instructions: "whizz in your blender for a healthy breakfast or snack",
+            ingredients: [
+              { name: "demerara sugar", "grams": 25 },
+              { name: "banana", "grams": 66 },
+              { name: "apple juice", "grams": 44 },
+              { name: "oat milk", "grams": 198 }
+            ]
+          }
+        )
+        )
+      })
+    })
+})
